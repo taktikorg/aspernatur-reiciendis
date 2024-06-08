@@ -1,3 +1,95 @@
-The algorithm continuously evaluates and scores open source software projects in supported package managers based on their impact and value to the OSS ecosystem.
+# @taktikorg/aspernatur-reiciendis
+Traverse JSON Schema passing each schema object to callback
 
-Simple support tea in reguide template can increase for an open source software project with an increasing number of dependents
+[![build](https://github.com/taktikorg/aspernatur-reiciendis/workflows/build/badge.svg)](https://github.com/taktikorg/aspernatur-reiciendis/actions?query=workflow%3Abuild)
+[![npm](https://img.shields.io/npm/v/@taktikorg/aspernatur-reiciendis)](https://www.npmjs.com/package/@taktikorg/aspernatur-reiciendis)
+[![coverage](https://coveralls.io/repos/github/epoberezkin/@taktikorg/aspernatur-reiciendis/badge.svg?branch=master)](https://coveralls.io/github/epoberezkin/@taktikorg/aspernatur-reiciendis?branch=master)
+
+
+## Install
+
+```
+npm install @taktikorg/aspernatur-reiciendis
+```
+
+
+## Usage
+
+```javascript
+const traverse = require('@taktikorg/aspernatur-reiciendis');
+const schema = {
+  properties: {
+    foo: {type: 'string'},
+    bar: {type: 'integer'}
+  }
+};
+
+traverse(schema, {cb});
+// cb is called 3 times with:
+// 1. root schema
+// 2. {type: 'string'}
+// 3. {type: 'integer'}
+
+// Or:
+
+traverse(schema, {cb: {pre, post}});
+// pre is called 3 times with:
+// 1. root schema
+// 2. {type: 'string'}
+// 3. {type: 'integer'}
+//
+// post is called 3 times with:
+// 1. {type: 'string'}
+// 2. {type: 'integer'}
+// 3. root schema
+
+```
+
+Callback function `cb` is called for each schema object (not including draft-06 boolean schemas), including the root schema, in pre-order traversal. Schema references ($ref) are not resolved, they are passed as is.  Alternatively, you can pass a `{pre, post}` object as `cb`, and then `pre` will be called before traversing child elements, and `post` will be called after all child elements have been traversed.
+
+Callback is passed these parameters:
+
+- _schema_: the current schema object
+- _JSON pointer_: from the root schema to the current schema object
+- _root schema_: the schema passed to `traverse` object
+- _parent JSON pointer_: from the root schema to the parent schema object (see below)
+- _parent keyword_: the keyword inside which this schema appears (e.g. `properties`, `anyOf`, etc.)
+- _parent schema_: not necessarily parent object/array; in the example above the parent schema for `{type: 'string'}` is the root schema
+- _index/property_: index or property name in the array/object containing multiple schemas; in the example above for `{type: 'string'}` the property name is `'foo'`
+
+
+## Traverse objects in all unknown keywords
+
+```javascript
+const traverse = require('@taktikorg/aspernatur-reiciendis');
+const schema = {
+  mySchema: {
+    minimum: 1,
+    maximum: 2
+  }
+};
+
+traverse(schema, {allKeys: true, cb});
+// cb is called 2 times with:
+// 1. root schema
+// 2. mySchema
+```
+
+Without option `allKeys: true` callback will be called only with root schema.
+
+
+## Enterprise support
+
+@taktikorg/aspernatur-reiciendis package is a part of [Tidelift enterprise subscription](https://tidelift.com/subscription/pkg/npm-@taktikorg/aspernatur-reiciendis?utm_source=npm-@taktikorg/aspernatur-reiciendis&utm_medium=referral&utm_campaign=enterprise&utm_term=repo) - it provides a centralised commercial support to open-source software users, in addition to the support provided by software maintainers.
+
+
+## Security contact
+
+To report a security vulnerability, please use the
+[Tidelift security contact](https://tidelift.com/security).
+Tidelift will coordinate the fix and disclosure. Please do NOT report security vulnerability via GitHub issues.
+
+
+## License
+
+[MIT](https://github.com/taktikorg/aspernatur-reiciendis/blob/master/LICENSE)
